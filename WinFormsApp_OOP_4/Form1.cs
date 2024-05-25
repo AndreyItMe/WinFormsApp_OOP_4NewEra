@@ -332,7 +332,7 @@ namespace WinFormsApp_OOP_2
             listBox.Items.Add(new ComboboxItem() { Text = itemName2, Value = itemFactory2 });
         }
 
-        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        private void ZipBintoolStripTextBox1_Click(object sender, EventArgs e)
         {
             string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN"; // исходна€ папка
             //File.Create("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN\\ZipBin.zip");
@@ -347,7 +347,7 @@ namespace WinFormsApp_OOP_2
             ZipFile.ExtractToDirectory(zipFile, targetFolder);
         }
 
-        private void toolStripTextBox3_Click(object sender, EventArgs e)
+        private void ZipJSONtoolStripTextBox3_Click(object sender, EventArgs e)
         {
             string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON"; // исходна€ папка
             string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON.zip"; // сжатый файл
@@ -359,6 +359,30 @@ namespace WinFormsApp_OOP_2
             string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON.zip"; // сжатый файл
             string targetFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON"; // папка, куда распаковываетс€ файл
             ZipFile.ExtractToDirectory(zipFile, targetFolder);
+        }
+
+        private void ZIPtoolStripLabel2_Click(object sender, EventArgs e)
+        {
+/*
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            string AssemblyFileName = openFileDialog1.FileName;
+*/
+            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+
+            //Assembly asm = Assembly.LoadFile("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2\\WinFormsApp1\\bin\\Debug\\net8.0-windows\\AssemblySandClock.dll");
+            Assembly asm = Assembly.LoadFile(AssemblyFileName);
+
+            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZipBintoolStripTextBox1");
+/*
+            Type? factoryType = asm.GetType("ZIPWinFormsLibrary1.ZipBintoolStripTextBox1");
+            Type? figureType = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.SandClock");
+*/
+            object itemFactory = Activator.CreateInstance(zipType);
+            string itemName = zipType.Name;
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = itemName, Value = itemFactory });
         }
     }
 }

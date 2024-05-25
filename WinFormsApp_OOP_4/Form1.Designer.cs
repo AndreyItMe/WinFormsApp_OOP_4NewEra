@@ -38,14 +38,16 @@
             toolStripLabelDeSerJSON = new ToolStripLabel();
             toolStripLabel1 = new ToolStripLabel();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
-            toolStripTextBox1 = new ToolStripTextBox();
-            toolStripTextBox2 = new ToolStripTextBox();
-            toolStripTextBox3 = new ToolStripTextBox();
-            toolStripTextBox4 = new ToolStripTextBox();
+            ZipBintoolStripTextBox1 = new ToolStripTextBox();
+            ExtractZipBintoolStripTextBox2 = new ToolStripTextBox();
+            ZipJSONtoolStripTextBox3 = new ToolStripTextBox();
+            ExtractZipJSONtoolStripTextBox4 = new ToolStripTextBox();
             cbKindOfProps = new PropertyGrid();
             listBox1 = new ListBox();
             bDeleteFigure = new Button();
             bReCreate = new Button();
+            ZIPlistBox2 = new ListBox();
+            ZIPtoolStripLabel2 = new ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip1.SuspendLayout();
             SuspendLayout();
@@ -74,7 +76,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabelDeSerBIN, toolStripLabelSerBIN, toolStripLabelSerJSON, toolStripLabelDeSerJSON, toolStripLabel1, toolStripDropDownButton1 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabelDeSerBIN, toolStripLabelSerBIN, toolStripLabelSerJSON, toolStripLabelDeSerJSON, toolStripLabel1, toolStripDropDownButton1, ZIPtoolStripLabel2 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(974, 25);
@@ -119,41 +121,41 @@
             // toolStripDropDownButton1
             // 
             toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { toolStripTextBox1, toolStripTextBox2, toolStripTextBox3, toolStripTextBox4 });
+            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { ZipBintoolStripTextBox1, ExtractZipBintoolStripTextBox2, ZipJSONtoolStripTextBox3, ExtractZipJSONtoolStripTextBox4 });
             toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
             toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
             toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             toolStripDropDownButton1.Size = new Size(29, 22);
             toolStripDropDownButton1.Text = "toolStripDropDownButton1";
             // 
-            // toolStripTextBox1
+            // ZipBintoolStripTextBox1
             // 
-            toolStripTextBox1.Name = "toolStripTextBox1";
-            toolStripTextBox1.Size = new Size(100, 23);
-            toolStripTextBox1.Text = "ZipBin";
-            toolStripTextBox1.TextBoxTextAlign = HorizontalAlignment.Center;
-            toolStripTextBox1.Click += toolStripTextBox1_Click;
+            ZipBintoolStripTextBox1.Name = "ZipBintoolStripTextBox1";
+            ZipBintoolStripTextBox1.Size = new Size(100, 23);
+            ZipBintoolStripTextBox1.Text = "ZipBin";
+            ZipBintoolStripTextBox1.TextBoxTextAlign = HorizontalAlignment.Center;
+            ZipBintoolStripTextBox1.Click += ZipBintoolStripTextBox1_Click;
             // 
-            // toolStripTextBox2
+            // ExtractZipBintoolStripTextBox2
             // 
-            toolStripTextBox2.Name = "toolStripTextBox2";
-            toolStripTextBox2.Size = new Size(100, 23);
-            toolStripTextBox2.Text = "ExtractZipBin";
-            toolStripTextBox2.Click += toolStripTextBox2_Click;
+            ExtractZipBintoolStripTextBox2.Name = "ExtractZipBintoolStripTextBox2";
+            ExtractZipBintoolStripTextBox2.Size = new Size(100, 23);
+            ExtractZipBintoolStripTextBox2.Text = "ExtractZipBin";
+            ExtractZipBintoolStripTextBox2.Click += toolStripTextBox2_Click;
             // 
-            // toolStripTextBox3
+            // ZipJSONtoolStripTextBox3
             // 
-            toolStripTextBox3.Name = "toolStripTextBox3";
-            toolStripTextBox3.Size = new Size(100, 23);
-            toolStripTextBox3.Text = "ZipJSON";
-            toolStripTextBox3.Click += toolStripTextBox3_Click;
+            ZipJSONtoolStripTextBox3.Name = "ZipJSONtoolStripTextBox3";
+            ZipJSONtoolStripTextBox3.Size = new Size(100, 23);
+            ZipJSONtoolStripTextBox3.Text = "ZipJSON";
+            ZipJSONtoolStripTextBox3.Click += ZipJSONtoolStripTextBox3_Click;
             // 
-            // toolStripTextBox4
+            // ExtractZipJSONtoolStripTextBox4
             // 
-            toolStripTextBox4.Name = "toolStripTextBox4";
-            toolStripTextBox4.Size = new Size(100, 23);
-            toolStripTextBox4.Text = "ExtractZipJSON";
-            toolStripTextBox4.Click += toolStripTextBox4_Click;
+            ExtractZipJSONtoolStripTextBox4.Name = "ExtractZipJSONtoolStripTextBox4";
+            ExtractZipJSONtoolStripTextBox4.Size = new Size(100, 23);
+            ExtractZipJSONtoolStripTextBox4.Text = "ExtractZipJSON";
+            ExtractZipJSONtoolStripTextBox4.Click += toolStripTextBox4_Click;
             // 
             // cbKindOfProps
             // 
@@ -192,11 +194,28 @@
             bReCreate.UseVisualStyleBackColor = true;
             bReCreate.Click += bReCreate_Click;
             // 
+            // ZIPlistBox2
+            // 
+            ZIPlistBox2.FormattingEnabled = true;
+            ZIPlistBox2.ItemHeight = 15;
+            ZIPlistBox2.Location = new Point(2, 157);
+            ZIPlistBox2.Name = "ZIPlistBox2";
+            ZIPlistBox2.Size = new Size(130, 94);
+            ZIPlistBox2.TabIndex = 8;
+            // 
+            // ZIPtoolStripLabel2
+            // 
+            ZIPtoolStripLabel2.Name = "ZIPtoolStripLabel2";
+            ZIPtoolStripLabel2.Size = new Size(109, 22);
+            ZIPtoolStripLabel2.Text = "Новые плагины(5)";
+            ZIPtoolStripLabel2.Click += ZIPtoolStripLabel2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(974, 555);
+            Controls.Add(ZIPlistBox2);
             Controls.Add(bReCreate);
             Controls.Add(bDeleteFigure);
             Controls.Add(listBox1);
@@ -230,9 +249,11 @@
         private Button bReCreate;
         private ToolStripLabel toolStripLabel1;
         private ToolStripDropDownButton toolStripDropDownButton1;
-        private ToolStripTextBox toolStripTextBox1;
-        private ToolStripTextBox toolStripTextBox2;
-        private ToolStripTextBox toolStripTextBox3;
-        private ToolStripTextBox toolStripTextBox4;
+        private ToolStripTextBox ZipBintoolStripTextBox1;
+        private ToolStripTextBox ExtractZipBintoolStripTextBox2;
+        private ToolStripTextBox ZipJSONtoolStripTextBox3;
+        private ToolStripTextBox ExtractZipJSONtoolStripTextBox4;
+        private ListBox ZIPlistBox2;
+        private ToolStripLabel ZIPtoolStripLabel2;
     }
 }
