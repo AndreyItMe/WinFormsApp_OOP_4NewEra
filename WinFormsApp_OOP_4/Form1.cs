@@ -212,7 +212,6 @@ namespace WinFormsApp_OOP_2
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-
             if (e.Button == MouseButtons.Left)
             {
                 endPoint = e.Location;
@@ -319,20 +318,18 @@ namespace WinFormsApp_OOP_2
             //Assembly asm = Assembly.LoadFile("C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2\\WinFormsApp1\\bin\\Debug\\net8.0-windows\\AssemblySandClock.dll");
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
 
-
             Type? factoryType = asm.GetType("WinFormsApp_OOP_2.Drawers.SandClockFactory");
             Type? figureType = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.SandClock");
             object itemFactory = Activator.CreateInstance(factoryType);
             string itemName = figureType.Name;
             listBox.Items.Add(new ComboboxItem() { Text = itemName, Value = itemFactory });
 
-            /*
-                        Type? factoryType2 = asm.GetType("WinFormsApp_OOP_2.Drawers.Square2Factory");
-                        Type? figureType2 = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.Square2");
-                        object itemFactory2 = Activator.CreateInstance(factoryType2);
-                        string itemName2 = figureType2.Name;
-                        listBox.Items.Add(new ComboboxItem() { Text = itemName2, Value = itemFactory2 });
-            */
+
+            Type? factoryType2 = asm.GetType("WinFormsApp_OOP_2Dima.Drawers.Square2Factory");
+            Type? figureType2 = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.Square2");
+            object itemFactory2 = Activator.CreateInstance(factoryType2);
+            string itemName2 = figureType2.Name;
+            listBox.Items.Add(new ComboboxItem() { Text = itemName2, Value = itemFactory2 });
         }
 
         private void toolStripTextBox1_Click(object sender, EventArgs e)
