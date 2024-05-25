@@ -1,0 +1,20 @@
+{
+  "$type": "System.Collections.Generic.List`1[[WinFormsApp_OOP_1.GraphicsFigures.Figures.IFigure, WinFormsApp_OOP_2]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "WinFormsApp_OOP_1.GraphicsFigures.Figures.Circle, WinFormsApp_OOP_2",
+      "StartPoint": "143, 95",
+      "EndPoint": "343, 226"
+    },
+    {
+      "$type": "WinFormsApp_OOP_1.GraphicsFigures.Figures.Rectangle, WinFormsApp_OOP_2",
+      "StartPoint": "262, 182",
+      "EndPoint": "503, 298"
+    },
+    {
+      "$type": "WinFormsApp_OOP_1.GraphicsFigures.Figures.Rectangle, WinFormsApp_OOP_2",
+      "StartPoint": "145, 34",
+      "EndPoint": "335, 366"
+    }
+  ]
+}
