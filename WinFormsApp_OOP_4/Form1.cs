@@ -41,6 +41,7 @@ namespace WinFormsApp_OOP_2
         }
 
         public List<IFigure> figuresList = new List<IFigure>();
+        public List<IFigure> functionList = new List<IFigure>();
         private Pen pen;
         private Brush penColor;
         private Brush shapeColor;
@@ -278,7 +279,6 @@ namespace WinFormsApp_OOP_2
             {
                 cbKindOfProps.SelectedObject = figuresList.ElementAt(SelectedIndex);
             }
-            int i = 0;
         }
 
         private void bReCreate_Click(object sender, EventArgs e)
@@ -316,12 +316,13 @@ namespace WinFormsApp_OOP_2
             string AssemblyFileName = openFileDialog1.FileName;
 
             //Assembly asm = Assembly.LoadFile("C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2\\WinFormsApp1\\bin\\Debug\\net8.0-windows\\AssemblySandClock.dll");
-            Assembly asm = Assembly.LoadFile(AssemblyFileName);
+            Assembly asm = Assembly.LoadFile(AssemblyFileName); //Ò·ÓÍ‡
 
             Type? factoryType = asm.GetType("WinFormsApp_OOP_2.Drawers.SandClockFactory");
             Type? figureType = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.SandClock");
             object itemFactory = Activator.CreateInstance(factoryType);
             string itemName = figureType.Name;
+
             listBox.Items.Add(new ComboboxItem() { Text = itemName, Value = itemFactory });
 
 
@@ -363,26 +364,35 @@ namespace WinFormsApp_OOP_2
 
         private void ZIPtoolStripLabel2_Click(object sender, EventArgs e)
         {
-/*
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            string AssemblyFileName = openFileDialog1.FileName;
-*/
             string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
-
-            //Assembly asm = Assembly.LoadFile("C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2\\WinFormsApp1\\bin\\Debug\\net8.0-windows\\AssemblySandClock.dll");
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
 
+            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
+            MethodInfo? square = zipType.GetMethod("OperationZipBin", BindingFlags.Public | BindingFlags.Static);
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationZipBin", Value = square });
+
+            square = zipType.GetMethod("OperationExtractZipBin", BindingFlags.Public | BindingFlags.Static);
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationExtractZipBin", Value = square });
+
+            square = zipType.GetMethod("OperationZipJSON", BindingFlags.Public | BindingFlags.Static);
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationZipJSON", Value = square });
+
+            square = zipType.GetMethod("OperationExtractZipJSON", BindingFlags.Public | BindingFlags.Static);
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationExtractZipJSON", Value = square });
+        }
+
+        private void ZIPlistBox2_SelectedIndexChanged(object sender, EventArgs e)
+        { 
+            string operationName = ZIPlistBox2.Text;
+
+            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+            Assembly asm = Assembly.LoadFile(AssemblyFileName);
             Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZipBintoolStripTextBox1");
-/*
-            Type? factoryType = asm.GetType("ZIPWinFormsLibrary1.ZipBintoolStripTextBox1");
-            Type? figureType = asm.GetType("WinFormsApp_OOP_1.GraphicsFigures.Figures.SandClock");
-*/
-            object itemFactory = Activator.CreateInstance(zipType);
-            string itemName = zipType.Name;
-            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = itemName, Value = itemFactory });
+            MethodInfo? square = zipType.GetMethod(operationName, BindingFlags.Public | BindingFlags.Static);
         }
     }
 }

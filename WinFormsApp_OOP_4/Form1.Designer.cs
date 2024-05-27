@@ -42,12 +42,12 @@
             ExtractZipBintoolStripTextBox2 = new ToolStripTextBox();
             ZipJSONtoolStripTextBox3 = new ToolStripTextBox();
             ExtractZipJSONtoolStripTextBox4 = new ToolStripTextBox();
+            ZIPtoolStripLabel2 = new ToolStripLabel();
             cbKindOfProps = new PropertyGrid();
             listBox1 = new ListBox();
             bDeleteFigure = new Button();
             bReCreate = new Button();
             ZIPlistBox2 = new ListBox();
-            ZIPtoolStripLabel2 = new ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip1.SuspendLayout();
             SuspendLayout();
@@ -157,6 +157,13 @@
             ExtractZipJSONtoolStripTextBox4.Text = "ExtractZipJSON";
             ExtractZipJSONtoolStripTextBox4.Click += toolStripTextBox4_Click;
             // 
+            // ZIPtoolStripLabel2
+            // 
+            ZIPtoolStripLabel2.Name = "ZIPtoolStripLabel2";
+            ZIPtoolStripLabel2.Size = new Size(109, 22);
+            ZIPtoolStripLabel2.Text = "Новые плагины(5)";
+            ZIPtoolStripLabel2.Click += ZIPtoolStripLabel2_Click;
+            // 
             // cbKindOfProps
             // 
             cbKindOfProps.Location = new Point(704, 219);
@@ -202,13 +209,7 @@
             ZIPlistBox2.Name = "ZIPlistBox2";
             ZIPlistBox2.Size = new Size(130, 94);
             ZIPlistBox2.TabIndex = 8;
-            // 
-            // ZIPtoolStripLabel2
-            // 
-            ZIPtoolStripLabel2.Name = "ZIPtoolStripLabel2";
-            ZIPtoolStripLabel2.Size = new Size(109, 22);
-            ZIPtoolStripLabel2.Text = "Новые плагины(5)";
-            ZIPtoolStripLabel2.Click += ZIPtoolStripLabel2_Click;
+            ZIPlistBox2.SelectedIndexChanged += ZIPlistBox2_SelectedIndexChanged;
             // 
             // Form1
             // 
