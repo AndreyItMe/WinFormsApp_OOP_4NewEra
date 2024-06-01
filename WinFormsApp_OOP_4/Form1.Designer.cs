@@ -48,6 +48,7 @@
             bDeleteFigure = new Button();
             bReCreate = new Button();
             ZIPlistBox2 = new ListBox();
+            AdaptPaterntoolStripTextBox1 = new ToolStripTextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip1.SuspendLayout();
             SuspendLayout();
@@ -76,7 +77,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabelDeSerBIN, toolStripLabelSerBIN, toolStripLabelSerJSON, toolStripLabelDeSerJSON, toolStripLabel1, toolStripDropDownButton1, ZIPtoolStripLabel2 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabelDeSerBIN, toolStripLabelSerBIN, toolStripLabelSerJSON, toolStripLabelDeSerJSON, toolStripLabel1, toolStripDropDownButton1, ZIPtoolStripLabel2, AdaptPaterntoolStripTextBox1 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(974, 25);
@@ -211,6 +212,13 @@
             ZIPlistBox2.TabIndex = 8;
             ZIPlistBox2.SelectedIndexChanged += ZIPlistBox2_SelectedIndexChanged;
             // 
+            // AdaptPaterntoolStripTextBox1
+            // 
+            AdaptPaterntoolStripTextBox1.Name = "AdaptPaterntoolStripTextBox1";
+            AdaptPaterntoolStripTextBox1.Size = new Size(100, 25);
+            AdaptPaterntoolStripTextBox1.Text = "ПатернТоварища";
+            AdaptPaterntoolStripTextBox1.Click += AdaptPaterntoolStripTextBox1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -256,5 +264,6 @@
         private ToolStripTextBox ExtractZipJSONtoolStripTextBox4;
         private ListBox ZIPlistBox2;
         private ToolStripLabel ZIPtoolStripLabel2;
+        private ToolStripTextBox AdaptPaterntoolStripTextBox1;
     }
 }

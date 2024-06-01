@@ -22,6 +22,9 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using System.IO.Compression;
+using BaseShapesClasses;
+using AdapterWinFormsLibrary1;
+using System.Text;
 
 namespace WinFormsApp_OOP_2
 {
@@ -33,6 +36,8 @@ namespace WinFormsApp_OOP_2
 
         Graphics graphics;
 
+        Adapter archivator;
+
         private WinFormsApp_OOP_1.GraphicsFigures.Figures.Rectangle prRectangleProp;
         private Square prSquareProp;
         public Form1()
@@ -42,10 +47,14 @@ namespace WinFormsApp_OOP_2
 
         public List<IFigure> figuresList = new List<IFigure>();
         public List<IFigure> functionList = new List<IFigure>();
+
+        private List<IShapePlugin> _plugins = new List<IShapePlugin>();
+        private ShapeProcessor _shapeProcessor = new ShapeProcessor(new List<IShapePlugin>());
         private Pen pen;
+/*
         private Brush penColor;
         private Brush shapeColor;
-
+*/
         private System.Drawing.Point startPoint;
         private System.Drawing.Point endPoint;
 
@@ -55,33 +64,46 @@ namespace WinFormsApp_OOP_2
 
         public void SerializeBIN()
         {
+            //€ должен помен€ть стрим файл, на просто стринг и потом его закинуть в Invoke и там уже сделать все по красоте:)
+
+            string bin = "";
+            MemoryStream stream = new MemoryStream();
+            Stream stream1 = new MemoryStream();
             using (FileStream fs = new FileStream("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN\\SerializeBIN.bin", FileMode.Truncate))
             {
                 foreach (IFigure figure in figuresList)
                 {
-                    formatter.Serialize(fs, figure);
+                    //formatter.Serialize(fs, figure);
+                    formatter.Serialize(stream1, figure);
                 }
                 fs.Close();
+                Encoding encoding = Encoding.UTF8;
+                StreamReader reader = new StreamReader(stream1, encoding);
+                string text2 = reader.ReadLine();
+                string text = reader.ReadToEnd();
+                bin = stream.ToString();
             }
-            string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN"; // исходна€ папка
-            string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBin.zip"; // сжатый файл
-            ZipFile.CreateFromDirectory(sourceFolder, zipFile);
+            //это €вно лишнее тк
+            if (AsmIsExist) // если есть расширение, то надо сохран€ть в зип файл
+            {
+                string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN"; // исходна€ папка
+                string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBin.zip"; // сжатый файл
+                ZipFile.CreateFromDirectory(sourceFolder, zipFile);
+                Directory.Delete(sourceFolder, true);
+            }
         }
 
         public void DeSerializeBIN()
         {
-            // десериализаци€ из файла people.dat
-
-            string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBin.zip"; // сжатый файл
+            //десериализаци€ из файла people.dat
+            //это €вно лишнее тк
             string targetFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN"; // папка, куда распаковываетс€ файл
-
-            if (!File.Exists(targetFolder))
+            if (AsmIsExist)
             {
-                //File.Create(targetFolder);
+                string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBin.zip"; // сжатый файл
+                ZipFile.ExtractToDirectory(zipFile, targetFolder, true); //true дл€ перезаписи файла
             }
-
-            ZipFile.ExtractToDirectory(zipFile, targetFolder, true); //true дл€ перезаписи файла
-
+            
             using (FileStream fs = new FileStream("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipBIN\\SerializeBIN.bin", FileMode.OpenOrCreate))
             {
                 while (fs.Position < fs.Length)
@@ -89,6 +111,10 @@ namespace WinFormsApp_OOP_2
                     IFigure figure = (IFigure)formatter.Deserialize(fs);
                     figuresList.Add(figure);
                 }
+            }
+            if (AsmIsExist)
+            {
+                Directory.Delete(targetFolder, true);
             }
 
             for (int i = 0; i < figuresList.Count; i++)
@@ -101,18 +127,6 @@ namespace WinFormsApp_OOP_2
 
         public void SerializeJSON()
         {
-            /*            using (FileStream fs = new FileStream("SerializeJSON.bin", FileMode.OpenOrCreate))
-                        {
-                            foreach (IFigure figure in figuresList)
-                            {
-                                System.Drawing.Point point = new System.Drawing.Point(0, 0);
-                                Circle figure2 = new Circle(point, point); 
-                                string json = JsonSerializer.Serialize(figure);
-                                //formatter.Serialize(fs, figure);
-                            }
-                        }*/
-
-            //selectedShape.IsSelected = false;
             var settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
@@ -120,26 +134,48 @@ namespace WinFormsApp_OOP_2
             };
 
             string json = JsonConvert.SerializeObject(figuresList, settings);
-            if (!File.Exists("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json"))
-            {
-                File.Create("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json");
-            }
-            File.WriteAllText("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json", json);
 
-            string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON"; // исходна€ папка
-            string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON.zip"; // сжатый файл
-            ZipFile.CreateFromDirectory(sourceFolder, zipFile);
 
+            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+            Assembly asm = Assembly.LoadFile(AssemblyFileName);
+            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
+            MethodInfo? square = zipType.GetMethod("OperationZipJSON", BindingFlags.Public | BindingFlags.Static);
+
+            object[] arguments = new object[] { json };
+
+            square?.Invoke(null, arguments);
+            //square?.Invoke(null, null);
+            /*
+                        Directory.CreateDirectory("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON");
+                        FileStream fs = new FileStream("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json", FileMode.Create);
+
+                                    if (!File.Exists("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json"))
+                                    {
+                                        Directory.CreateDirectory("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON");
+                                        File.Create("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json");
+                                    }
+
+                        byte[] info = new UTF8Encoding(true).GetBytes(json);
+                        fs.Write(info, 0, info.Length);
+                        fs.Close();
+                        //File.WriteAllText("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json", json);
+                        //это €вно лишнее тк
+
+                        if (AsmIsExist)
+                        {
+                            string sourceFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON"; // исходна€ папка
+                            string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON.zip"; // сжатый файл
+                            File.Delete(zipFile);
+                            ZipFile.CreateFromDirectory(sourceFolder, zipFile);
+                            Directory.Delete(sourceFolder, true);
+                        }
+            */
         }
 
         public void DeSerializeJSON()
+        //public List<IFigure> DeSerializeJSON()
         {
-            string zipFile = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON.zip"; // сжатый файл
-            string targetFolder = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON"; // папка, куда распаковываетс€ файл
-            ZipFile.ExtractToDirectory(zipFile, targetFolder);
-
-            string json = File.ReadAllText("C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\ZipJSON\\SerializeJSON.json");
-
+            string json = "";
             var settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
@@ -147,15 +183,26 @@ namespace WinFormsApp_OOP_2
 
             };
 
-            figuresList = JsonConvert.DeserializeObject<List<IFigure>>(json, settings);
-
-            //вот эта хрень добавл€ет WinFormApp в listBox
-
-            foreach (IFigure figure in figuresList)
+            if (AsmIsExist)
             {
-                //listBox.Items.Add(figure);
-                //listBox1.Items.Add(figuresList.Count + "." + figure.ToString);
+                string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+                Assembly asm = Assembly.LoadFile(AssemblyFileName);
+                Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
+                MethodInfo? square = zipType.GetMethod("OperationExtractZipJSON", BindingFlags.Public | BindingFlags.Static);
+                
+                object[] arguments = new object[] { json };
+
+                object result = square?.Invoke(null, null);
+                var list = (object[])result;
+                string resultString = list[0].ToString();
+                
+                figuresList = JsonConvert.DeserializeObject<List<IFigure>>(resultString, settings);
             }
+
+            //figuresList = JsonConvert.DeserializeObject<List<IFigure>>(json, settings);
+
+            //вот эта  добавл€ет WinFormApp в listBox
+
             for (int i = 0; i < figuresList.Count; i++)
             {
                 listBox1.Items.Add(i + 1 + "." + figuresList[i].ToString());
@@ -362,10 +409,20 @@ namespace WinFormsApp_OOP_2
             ZipFile.ExtractToDirectory(zipFile, targetFolder);
         }
 
+        bool AsmIsExist = false;
+
         private void ZIPtoolStripLabel2_Click(object sender, EventArgs e)
         {
-            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            string AssemblyFileName = openFileDialog1.FileName;
+
+            //string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+            //string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\a.dll";
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
+            AsmIsExist = true;
 
             Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
             MethodInfo? square = zipType.GetMethod("OperationZipBin", BindingFlags.Public | BindingFlags.Static);
@@ -386,13 +443,122 @@ namespace WinFormsApp_OOP_2
         }
 
         private void ZIPlistBox2_SelectedIndexChanged(object sender, EventArgs e)
-        { 
+        {
             string operationName = ZIPlistBox2.Text;
 
             string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
-            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZipBintoolStripTextBox1");
+            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
             MethodInfo? square = zipType.GetMethod(operationName, BindingFlags.Public | BindingFlags.Static);
+            square?.Invoke(null, null);
+        }
+        /*
+                class IFigureToAbstractShapeAdapter : AbstractShape
+                {
+                    IFigure Figure;
+                    // = new Brush();
+                    public IFigureToAbstractShapeAdapter(IFigure figure)
+                    {
+                        Figure = figure;
+                        public Brush color = new Brush();
+                    }
+                }
+        */
+/*
+        public AbstractShape IFigureToAbstractShapeAdapter(IFigure figure)
+        {
+
+            AbstractShape abstractShape = new AbstractShape();
+            System.Drawing.Brush brush = new System.Windows.Media.Brush();
+            abstractShape.Color = figure.color;
+            abstractShape.Color = ;
+            //abstractShape.List<Point> listOfPoints
+
+            return abstractShape;
+
+        }*/
+
+        private void AdaptPaterntoolStripTextBox1_Click(object sender, EventArgs e)
+        {
+            /*
+                        string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\OOP_4-detached\\TypesConverting (3)\\TypesConverting\\bin\\Debug\\net8.0-windows\\TypesConverting.dll";
+                        Assembly asm = Assembly.LoadFile(AssemblyFileName);
+
+                        Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
+                        MethodInfo? method = zipType.GetMethod("OperationZipBin", BindingFlags.Public | BindingFlags.Static);
+                        //square?.Invoke(null, null);
+                        ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationZipBin", Value = method });
+
+                        method = zipType.GetMethod("OperationExtractZipBin", BindingFlags.Public | BindingFlags.Static);
+                        //square?.Invoke(null, null);
+                        ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationExtractZipBin", Value = method });
+            */
+
+            //C:\Users\andrey\Desktop\4sem\ќќ“ѕи—ѕ\WinFormsApp_OOP_2-master (2)\WinFormsApp_OOP_2-master\WinFormsApp_OOP_2\WinFormsApp_OOP_2.csproj
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
+                InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string assemblyPath = openFileDialog.FileName;
+                try
+                {
+                    archivator = new Adapter(assemblyPath);
+                    MessageBox.Show("Plugin loaded successfully!");
+
+                    ToolStripMenuItem functionsToolMenuItem = new ToolStripMenuItem(archivator.ToString());
+/*
+                    ToolStripMenuItem saveToZipMenuItem = new ToolStripMenuItem("Save to ZIP");
+                    saveToZipMenuItem.Click += SaveToZipMenuItem_Click;
+
+                    ToolStripMenuItem openZipMenuItem = new ToolStripMenuItem("Open ZIP");
+                    openZipMenuItem.Click += OpenZipMenuItem_Click;
+
+                    functionsToolMenuItem.DropDownItems.Add(saveToZipMenuItem);
+                    functionsToolMenuItem.DropDownItems.Add(openZipMenuItem);
+
+*/                    
+                    //pluginsToolStripMenuItem.DropDownItems.Add(functionsToolMenuItem);
+                    //ZIPlistBox2.Items.Add(functionsToolMenuItem);
+                    ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "AdapterPlugin", Value = functionsToolMenuItem });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to load plugin: {ex.Message}");
+                }
+            }
+
+            string operationName = "LoadShapes";
+            string pluginPath = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsApp_OOP_2\\bin\\Debug\\net8.0-windows\\WinFormsApp_OOP_2.dll";
+            Assembly asm = Assembly.LoadFrom(pluginPath);
+            Type xmlToJson = asm.GetType("LoadShapes");
+            MethodInfo? square = xmlToJson.GetMethod(operationName, BindingFlags.Public);
+            square?.Invoke(null, null);
+
+
+
+            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            {
+                Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
+                InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
+            };
+            //string pluginPath = "";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                pluginPath = openFileDialog2.FileName;
+            }
+            var loadedPlugins = PluginLoader.LoadPlugins(Path.GetDirectoryName(pluginPath));
+
+            _plugins.AddRange(loadedPlugins);
+            _shapeProcessor = new ShapeProcessor(_plugins);
+
+            foreach (var plugin in _plugins)
+            {
+                var menuItem = new ToolStripMenuItem(plugin.Name);
+                ZIPlistBox2.Items.Add(menuItem);
+            }
         }
     }
 }

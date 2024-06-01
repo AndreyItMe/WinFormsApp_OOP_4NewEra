@@ -7,12 +7,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\WinFormsApp_OOP_4\WinFormsApp_OOP_4.csproj" />
-  </ItemGroup>
-
 </Project>
