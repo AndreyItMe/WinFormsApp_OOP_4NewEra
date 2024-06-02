@@ -445,12 +445,56 @@ namespace WinFormsApp_OOP_2
         private void ZIPlistBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             string operationName = ZIPlistBox2.Text;
+            /*
+                        string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+                        Assembly asm = Assembly.LoadFile(AssemblyFileName);
+                        Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
+                        MethodInfo? square = zipType.GetMethod(operationName, BindingFlags.Public | BindingFlags.Static);
+                        square?.Invoke(null, null);
+            */
 
-            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            string AssemblyFileName = openFileDialog1.FileName;
+            //˝ÚÓÚ AssemblyFileName Ì‡‰Ó Ò‰ÂÎ‡Ú¸ „ÎÓ·‡ÎÍÓÈ
+
+            AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows\\WinFormsLibrary2.dll";
+            //string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\a.dll";
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
-            Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
-            MethodInfo? square = zipType.GetMethod(operationName, BindingFlags.Public | BindingFlags.Static);
-            square?.Invoke(null, null);
+            Type? type = asm.GetType("XmlToJsonPlugin");
+
+            switch (operationName)
+            {
+                case "ProcessBeforeSave":
+                    //XML2JSON
+                    
+                    break;
+                case "ProcessAfterLoad":
+                    //JSON2XML
+                    var settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All,
+                        Formatting = Newtonsoft.Json.Formatting.Indented
+                    };
+                    string json = JsonConvert.SerializeObject(figuresList, settings);
+                    object[] arguments = new object[] { json };
+                    object[] arguments2 = arguments;
+
+                    MethodInfo? square = type.GetMethod("ProcessBeforeSave", BindingFlags.Public); //XML2JSON
+                    square?.Invoke(null, arguments); 
+                    //‚ ProcessBeforeSave ÔËÌÏ‡ÂÚÒˇ string 
+
+                    var list = (object[])arguments;
+                    string resultString = list[0].ToString();
+
+                    break;
+                case "ArchiveXmlFile":  //‚ÓÚ Ëı ˇ ÌÂ Â‡ÎËÁÓ‚‡Î Â˘Â
+                    break;
+                case "UnzipArchive":    //‚ÓÚ Ëı ˇ ÌÂ Â‡ÎËÁÓ‚‡Î Â˘Â
+                    break;
+            }
         }
         /*
                 class IFigureToAbstractShapeAdapter : AbstractShape
@@ -480,6 +524,25 @@ namespace WinFormsApp_OOP_2
 
         private void AdaptPaterntoolStripTextBox1_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            string AssemblyFileName = openFileDialog1.FileName;
+
+            AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows\\WinFormsLibrary2.dll";
+            //string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\a.dll";
+            Assembly asm = Assembly.LoadFile(AssemblyFileName);
+            Type? zipType = asm.GetType("XmlToJsonPlugin"); //WinFormsLibrary2
+
+            MethodInfo? square = zipType.GetMethod("ProcessBeforeSave", BindingFlags.Public); //XML2JSON
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "ProcessBeforeSave", Value = square });
+
+            square = zipType.GetMethod("ProcessAfterLoad", BindingFlags.Public | BindingFlags.Static); //JSON2XML
+            //square?.Invoke(null, null);
+            ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "ProcessAfterLoad", Value = square });
+
             /*
                         string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\OOP_4-detached\\TypesConverting (3)\\TypesConverting\\bin\\Debug\\net8.0-windows\\TypesConverting.dll";
                         Assembly asm = Assembly.LoadFile(AssemblyFileName);
@@ -493,72 +556,73 @@ namespace WinFormsApp_OOP_2
                         //square?.Invoke(null, null);
                         ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "OperationExtractZipBin", Value = method });
             */
+            /*
+                        //C:\Users\andrey\Desktop\4sem\ŒŒ“œË—œ\WinFormsApp_OOP_2-master (2)\WinFormsApp_OOP_2-master\WinFormsApp_OOP_2\WinFormsApp_OOP_2.csproj
+                        OpenFileDialog openFileDialog = new OpenFileDialog
+                        {
+                            Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
+                            InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
+                        };
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string assemblyPath = openFileDialog.FileName;
+                            try
+                            {
+                                archivator = new Adapter(assemblyPath);
+                                MessageBox.Show("Plugin loaded successfully!");
 
-            //C:\Users\andrey\Desktop\4sem\ŒŒ“œË—œ\WinFormsApp_OOP_2-master (2)\WinFormsApp_OOP_2-master\WinFormsApp_OOP_2\WinFormsApp_OOP_2.csproj
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
-                InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
-            };
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string assemblyPath = openFileDialog.FileName;
-                try
-                {
-                    archivator = new Adapter(assemblyPath);
-                    MessageBox.Show("Plugin loaded successfully!");
+                                ToolStripMenuItem functionsToolMenuItem = new ToolStripMenuItem(archivator.ToString());
+            *//*
+                                ToolStripMenuItem saveToZipMenuItem = new ToolStripMenuItem("Save to ZIP");
+                                saveToZipMenuItem.Click += SaveToZipMenuItem_Click;
 
-                    ToolStripMenuItem functionsToolMenuItem = new ToolStripMenuItem(archivator.ToString());
-/*
-                    ToolStripMenuItem saveToZipMenuItem = new ToolStripMenuItem("Save to ZIP");
-                    saveToZipMenuItem.Click += SaveToZipMenuItem_Click;
+                                ToolStripMenuItem openZipMenuItem = new ToolStripMenuItem("Open ZIP");
+                                openZipMenuItem.Click += OpenZipMenuItem_Click;
 
-                    ToolStripMenuItem openZipMenuItem = new ToolStripMenuItem("Open ZIP");
-                    openZipMenuItem.Click += OpenZipMenuItem_Click;
+                                functionsToolMenuItem.DropDownItems.Add(saveToZipMenuItem);
+                                functionsToolMenuItem.DropDownItems.Add(openZipMenuItem);
 
-                    functionsToolMenuItem.DropDownItems.Add(saveToZipMenuItem);
-                    functionsToolMenuItem.DropDownItems.Add(openZipMenuItem);
+            *//*                    
+                                //pluginsToolStripMenuItem.DropDownItems.Add(functionsToolMenuItem);
+                                //ZIPlistBox2.Items.Add(functionsToolMenuItem);
+                                ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "AdapterPlugin", Value = functionsToolMenuItem });
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Failed to load plugin: {ex.Message}");
+                            }
+                        }
 
-*/                    
-                    //pluginsToolStripMenuItem.DropDownItems.Add(functionsToolMenuItem);
-                    //ZIPlistBox2.Items.Add(functionsToolMenuItem);
-                    ZIPlistBox2.Items.Add(new ComboboxItem() { Text = "AdapterPlugin", Value = functionsToolMenuItem });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to load plugin: {ex.Message}");
-                }
-            }
-
-            string operationName = "LoadShapes";
-            string pluginPath = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsApp_OOP_2\\bin\\Debug\\net8.0-windows\\WinFormsApp_OOP_2.dll";
-            Assembly asm = Assembly.LoadFrom(pluginPath);
-            Type xmlToJson = asm.GetType("LoadShapes");
-            MethodInfo? square = xmlToJson.GetMethod(operationName, BindingFlags.Public);
-            square?.Invoke(null, null);
+                        string operationName = "LoadShapes";
+                        string pluginPath = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsApp_OOP_2\\bin\\Debug\\net8.0-windows\\WinFormsApp_OOP_2.dll";
+                        Assembly asm = Assembly.LoadFrom(pluginPath);
+                        Type xmlToJson = asm.GetType("LoadShapes");
+                        MethodInfo? square = xmlToJson.GetMethod(operationName, BindingFlags.Public);
+                        square?.Invoke(null, null);
 
 
 
-            OpenFileDialog openFileDialog2 = new OpenFileDialog
-            {
-                Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
-                InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
-            };
-            //string pluginPath = "";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                pluginPath = openFileDialog2.FileName;
-            }
-            var loadedPlugins = PluginLoader.LoadPlugins(Path.GetDirectoryName(pluginPath));
+                        OpenFileDialog openFileDialog2 = new OpenFileDialog
+                        {
+                            Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
+                            InitialDirectory = "C:\\Users\\andrey\\Desktop\\4sem\\ŒŒ“œË—œ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows"
+                        };
+                        //string pluginPath = "";
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            pluginPath = openFileDialog2.FileName;
+                        }
+                        var loadedPlugins = PluginLoader.LoadPlugins(Path.GetDirectoryName(pluginPath));
 
-            _plugins.AddRange(loadedPlugins);
-            _shapeProcessor = new ShapeProcessor(_plugins);
+                        _plugins.AddRange(loadedPlugins);
+                        _shapeProcessor = new ShapeProcessor(_plugins);
 
-            foreach (var plugin in _plugins)
-            {
-                var menuItem = new ToolStripMenuItem(plugin.Name);
-                ZIPlistBox2.Items.Add(menuItem);
-            }
+                        foreach (var plugin in _plugins)
+                        {
+                            var menuItem = new ToolStripMenuItem(plugin.Name);
+                            ZIPlistBox2.Items.Add(menuItem);
+                        }
+            */
         }
     }
 }

@@ -43,12 +43,12 @@
             ZipJSONtoolStripTextBox3 = new ToolStripTextBox();
             ExtractZipJSONtoolStripTextBox4 = new ToolStripTextBox();
             ZIPtoolStripLabel2 = new ToolStripLabel();
+            AdaptPaterntoolStripTextBox1 = new ToolStripTextBox();
             cbKindOfProps = new PropertyGrid();
             listBox1 = new ListBox();
             bDeleteFigure = new Button();
             bReCreate = new Button();
             ZIPlistBox2 = new ListBox();
-            AdaptPaterntoolStripTextBox1 = new ToolStripTextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip1.SuspendLayout();
             SuspendLayout();
@@ -165,6 +165,13 @@
             ZIPtoolStripLabel2.Text = "Новые плагины(5)";
             ZIPtoolStripLabel2.Click += ZIPtoolStripLabel2_Click;
             // 
+            // AdaptPaterntoolStripTextBox1
+            // 
+            AdaptPaterntoolStripTextBox1.Name = "AdaptPaterntoolStripTextBox1";
+            AdaptPaterntoolStripTextBox1.Size = new Size(100, 25);
+            AdaptPaterntoolStripTextBox1.Text = "ПатернТоварища";
+            AdaptPaterntoolStripTextBox1.Click += AdaptPaterntoolStripTextBox1_Click;
+            // 
             // cbKindOfProps
             // 
             cbKindOfProps.Location = new Point(704, 219);
@@ -206,18 +213,11 @@
             // 
             ZIPlistBox2.FormattingEnabled = true;
             ZIPlistBox2.ItemHeight = 15;
-            ZIPlistBox2.Location = new Point(2, 157);
+            ZIPlistBox2.Location = new Point(0, 154);
             ZIPlistBox2.Name = "ZIPlistBox2";
             ZIPlistBox2.Size = new Size(130, 94);
             ZIPlistBox2.TabIndex = 8;
             ZIPlistBox2.SelectedIndexChanged += ZIPlistBox2_SelectedIndexChanged;
-            // 
-            // AdaptPaterntoolStripTextBox1
-            // 
-            AdaptPaterntoolStripTextBox1.Name = "AdaptPaterntoolStripTextBox1";
-            AdaptPaterntoolStripTextBox1.Size = new Size(100, 25);
-            AdaptPaterntoolStripTextBox1.Text = "ПатернТоварища";
-            AdaptPaterntoolStripTextBox1.Click += AdaptPaterntoolStripTextBox1_Click;
             // 
             // Form1
             // 
