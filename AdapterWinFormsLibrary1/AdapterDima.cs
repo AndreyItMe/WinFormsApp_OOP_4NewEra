@@ -2,13 +2,16 @@
 
 namespace AdapterWinFormsLibrary1
 {
-    public class Adapter
+    public class AdapterDima
     {
         private readonly object _archivator;
-        private readonly MethodInfo _archiveXmlFileMethod;
-        private readonly MethodInfo _unzipArchiveMethod;
+        public readonly MethodInfo _archiveXmlFileMethod;
+        public readonly MethodInfo _unzipArchiveMethod;
+        public readonly MethodInfo _processBeforeSave; //XML2JSON
+        public readonly MethodInfo _processAfterLoad;    //JSON2XML
+        string dataType;
 
-        public Adapter(string assemblyPath)
+        public AdapterDima(string assemblyPath)
         {
             //JSON2XML; XML2JSON
             //констркутор знать настройки json, xml
@@ -27,11 +30,24 @@ namespace AdapterWinFormsLibrary1
 
             _archiveXmlFileMethod = archivatorType.GetMethod("ArchiveXmlFile");
             _unzipArchiveMethod = archivatorType.GetMethod("UnzipArchive");
+            _processBeforeSave = archivatorType.GetMethod("ProcessBeforeSave");
+            _processAfterLoad = archivatorType.GetMethod("ProcessAfterLoad");
 
-            if (_archiveXmlFileMethod == null || _unzipArchiveMethod == null)
+            if (_archiveXmlFileMethod == null || _unzipArchiveMethod == null || 
+                _processBeforeSave == null || _processAfterLoad == null)
             {
                 throw new Exception("Methods not found in the selected Archivator type.");
             }
+            
+        }
+
+        public void ProcessBeforeSave(ref string json)
+        {
+            _processBeforeSave.Invoke(_archivator, new object[] { json, dataType });
+        }
+        public void ProcessAfterLoad(ref string json) //тут отказался от "string dataType"
+        {
+            _processAfterLoad.Invoke(_archivator, new object[] { json });
         }
 
         public void ArchiveXmlFile(string filePath, string zipFilePath)

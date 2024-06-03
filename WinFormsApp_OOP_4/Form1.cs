@@ -446,49 +446,81 @@ namespace WinFormsApp_OOP_2
         {
             string operationName = ZIPlistBox2.Text;
             /*
-                        string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\NewEra\\WinFormsApp_OOP_2-master (1)\\WinFormsApp_OOP_2-master\\ZIPWinFormsLibrary1\\bin\\Debug\\net8.0-windows\\ZIPWinFormsLibrary1.dll";
-                        Assembly asm = Assembly.LoadFile(AssemblyFileName);
-                        Type? zipType = asm.GetType("ZIPWinFormsLibrary1.ZiptoolStripTextBox1");
-                        MethodInfo? square = zipType.GetMethod(operationName, BindingFlags.Public | BindingFlags.Static);
-                        square?.Invoke(null, null);
+                        OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                        openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
+                        if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                            return;
+                        string AssemblyFileName = openFileDialog1.FileName;
             */
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "Text files(*.dll)|*.dll|All files(*.*)|*.*";
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            string AssemblyFileName = openFileDialog1.FileName;
             //этот AssemblyFileName надо сделать глобалкой
 
-            AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows\\WinFormsLibrary2.dll";
+            string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\ќќ“ѕи—ѕ\\WinFormsApp_OOP_2-master (2)\\WinFormsApp_OOP_2-master\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows\\WinFormsLibrary2.dll";
             //string AssemblyFileName = "C:\\Users\\andrey\\Desktop\\4sem\\a.dll";
             Assembly asm = Assembly.LoadFile(AssemblyFileName);
             Type? type = asm.GetType("XmlToJsonPlugin");
+            AdapterDima adapter = new AdapterDima(AssemblyFileName);
 
+
+            XmlDocument doc = new XmlDocument(); //используетс€ в двух case поэтому надо его вынести наружу
+
+            string xml = "";
             switch (operationName)
             {
                 case "ProcessBeforeSave":
                     //XML2JSON
                     
+                    string data = ""; //данные в
+                    adapter.ProcessBeforeSave(ref xml);
+
+/*
+                    //XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(data);
+                    data = JsonConvert.SerializeXmlNode(doc);
+*/
                     break;
                 case "ProcessAfterLoad":
                     //JSON2XML
+                    
+
                     var settings = new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Formatting = Newtonsoft.Json.Formatting.Indented
+                        //Formatting = Newtonsoft.Json.Formatting.Indented
                     };
                     string json = JsonConvert.SerializeObject(figuresList, settings);
+                    //string json = JsonConvert.SerializeObject(figuresList);
                     object[] arguments = new object[] { json };
                     object[] arguments2 = arguments;
 
-                    MethodInfo? square = type.GetMethod("ProcessBeforeSave", BindingFlags.Public); //XML2JSON
-                    square?.Invoke(null, arguments); 
-                    //в ProcessBeforeSave принмаетс€ string 
+                    string data2 = "";
+                    data = json;
+                    doc = JsonConvert.DeserializeXmlNode(data, "WinFormsApp_OOP_1.GraphicsFigures.Figures.IFigure");
+                    using (var stringWriter = new StringWriter())
+                    using (var xmlTextWriter = XmlWriter.Create(stringWriter))
+                    {
+                        doc.WriteTo(xmlTextWriter);
+                        xmlTextWriter.Flush();
+                        data2 = stringWriter.GetStringBuilder().ToString();
+                    }
 
-                    var list = (object[])arguments;
-                    string resultString = list[0].ToString();
+                    //проверка что он вернетс€ в начальное состо€ние
+                    doc.LoadXml(data2);
+                    data = JsonConvert.SerializeXmlNode(doc);
+                    /*
+                                        перенес весь код в мейн, чтобы возможные ошибки показывались тут, после надо 
+                                        после надо будет обратно все вернуть
+                                        MethodInfo? square = type.GetMethod("ProcessAfterLoad"); //XML2JSON
+                                        square?.Invoke(null, arguments); 
+                                        //в ProcessBeforeSave принмаетс€ string 
 
+                                        var list = (object[])arguments;
+                                        string resultString = list[0].ToString();
+
+                                        if(arguments == arguments2)
+                                        {
+                                            int i = 0;
+                                        }
+                    */
                     break;
                 case "ArchiveXmlFile":  //вот их € не реализорвал еще
                     break;
