@@ -9,7 +9,7 @@ namespace AdapterWinFormsLibrary1
         public readonly MethodInfo _unzipArchiveMethod;
         public readonly MethodInfo _processBeforeSave; //XML2JSON
         public readonly MethodInfo _processAfterLoad;    //JSON2XML
-        string dataType;
+        string dataType { get; set; }
 
         public AdapterDima(string assemblyPath)
         {
@@ -43,11 +43,16 @@ namespace AdapterWinFormsLibrary1
 
         public void ProcessBeforeSave(ref string json)
         {
-            _processBeforeSave.Invoke(_archivator, new object[] { json, dataType });
+            //_processBeforeSave.Invoke(null, new object[] { json });
+            object result = _processBeforeSave.Invoke(_archivator, new object[] { json });
+            var list = (object[])result;
+            json = list[0].ToString();
         }
-        public void ProcessAfterLoad(ref string json) //тут отказался от "string dataType"
+        public void ProcessAfterLoad(ref string json, string dataType) //тут отказался от "string dataType"
         {
-            _processAfterLoad.Invoke(_archivator, new object[] { json });
+            object result = _processAfterLoad.Invoke(_archivator, new object[] { json, dataType });
+            var list = (object[])result;
+            json = list[0].ToString();
         }
 
         public void ArchiveXmlFile(string filePath, string zipFilePath)

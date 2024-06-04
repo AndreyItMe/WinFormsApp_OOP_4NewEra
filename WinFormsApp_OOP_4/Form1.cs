@@ -33,6 +33,7 @@ namespace WinFormsApp_OOP_2
         private Circle prCircleProp;
         private Ellipse prEllipseProp;
         private Line prLineProp;
+        public string xml = "";
 
         Graphics graphics;
 
@@ -463,15 +464,19 @@ namespace WinFormsApp_OOP_2
 
             XmlDocument doc = new XmlDocument(); //используется в двух case поэтому надо его вынести наружу
 
-            string xml = "";
+            
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                //Formatting = Newtonsoft.Json.Formatting.Indented
+            };
             switch (operationName)
             {
                 case "ProcessBeforeSave":
                     //XML2JSON
-                    
-                    string data = ""; //данные в
-                    adapter.ProcessBeforeSave(ref xml);
 
+                    adapter.ProcessBeforeSave(ref xml);
+                     
 /*
                     //XmlDocument doc = new XmlDocument();
                     doc.LoadXml(data);
@@ -480,20 +485,19 @@ namespace WinFormsApp_OOP_2
                     break;
                 case "ProcessAfterLoad":
                     //JSON2XML
-                    
-
-                    var settings = new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.All,
-                        //Formatting = Newtonsoft.Json.Formatting.Indented
-                    };
                     string json = JsonConvert.SerializeObject(figuresList, settings);
+                    string dataType = "WinFormsApp_OOP_1.GraphicsFigures.Figures.IFigure";
+                    adapter.ProcessAfterLoad(ref json, dataType);
+                    xml = json;
+                    json = JsonConvert.SerializeObject(figuresList, settings);
+
+                    /*
                     //string json = JsonConvert.SerializeObject(figuresList);
                     object[] arguments = new object[] { json };
                     object[] arguments2 = arguments;
 
                     string data2 = "";
-                    data = json;
+                    string data = json;
                     doc = JsonConvert.DeserializeXmlNode(data, "WinFormsApp_OOP_1.GraphicsFigures.Figures.IFigure");
                     using (var stringWriter = new StringWriter())
                     using (var xmlTextWriter = XmlWriter.Create(stringWriter))
@@ -506,7 +510,7 @@ namespace WinFormsApp_OOP_2
                     //проверка что он вернется в начальное состояние
                     doc.LoadXml(data2);
                     data = JsonConvert.SerializeXmlNode(doc);
-                    /*
+                    *//*
                                         перенес весь код в мейн, чтобы возможные ошибки показывались тут, после надо 
                                         после надо будет обратно все вернуть
                                         MethodInfo? square = type.GetMethod("ProcessAfterLoad"); //XML2JSON
@@ -521,6 +525,7 @@ namespace WinFormsApp_OOP_2
                                             int i = 0;
                                         }
                     */
+
                     break;
                 case "ArchiveXmlFile":  //вот их я не реализорвал еще
                     break;
